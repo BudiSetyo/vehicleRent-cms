@@ -1,8 +1,14 @@
+import { DashboardLayout } from "@/components";
+
 const Dashboard = () => {
   return (
-    <main>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </main>
+    <DashboardLayout>
+      <main className="">
+        <section className="">
+          <h1>Under Developing</h1>
+        </section>
+      </main>
+    </DashboardLayout>
   );
 };
 
