@@ -72,20 +72,17 @@ const Customer = () => {
             <Input
               className="mr-2"
               placeholder="Search"
-              style={{
-                width: 125,
-              }}
               prefix={<SearchOutlined />}
             />
           </div>
 
-          <Button
+          {/* <Button
             type="primary"
             className="flex items-center justify-center bg-algae-green w-fit px-2 rounded-full"
           >
             <PlusCircleOutlined className="mr-2 mb-1 text-lg text-white" />
             <p className="text-white text-lg">Create vehicle</p>
-          </Button>
+          </Button> */}
         </div>
         <section className="flex flex-col">
           <Table

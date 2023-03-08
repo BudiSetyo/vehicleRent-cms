@@ -62,9 +62,6 @@ const Admin = () => {
             <Input
               className="mr-2"
               placeholder="Search"
-              style={{
-                width: 125,
-              }}
               prefix={<SearchOutlined />}
             />
           </div>
@@ -74,7 +71,7 @@ const Admin = () => {
             className="flex items-center justify-center bg-algae-green w-fit px-2 rounded-full"
           >
             <PlusCircleOutlined className="mr-2 mb-1 text-lg text-white" />
-            <p className="text-white text-lg">Create vehicle</p>
+            <p className="text-white text-lg">Create admin</p>
           </Button>
         </div>
         <section className="flex flex-col">

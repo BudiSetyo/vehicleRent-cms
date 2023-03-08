@@ -1,13 +1,19 @@
 import { DashboardLayout } from "@/components";
 import { Table, Pagination, Input, Button, Select } from "antd";
 import { SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
+import axios from "axios";
+const api = process.env.API_VRENT;
 
 const Vehicles = () => {
+  const [loading, setLoading] = useState(false);
+  const [vehicles, setVehicles] = useState({ data: [], total: 0 });
+
   const columns = [
     {
       title: "Vehicle",
-      dataIndex: "vehicle",
-      key: "vehicle",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Type",
@@ -36,32 +42,26 @@ const Vehicles = () => {
     },
   ];
 
-  const data = [
-    {
-      vehicle: "Lambo",
-      type: "car",
-      location: "jombok",
-      capacity: 2,
-      popular: true,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      price: 1000000,
-      status: "available",
-      stock: 4,
-      key: "1",
-    },
-    {
-      vehicle: "Lambo",
-      type: "car",
-      location: "jombok",
-      capacity: 2,
-      popular: true,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      price: 1000000,
-      status: "available",
-      stock: 4,
-      key: "2",
-    },
-  ];
+  const fetchVehicles = () => {
+    setLoading(!loading);
+
+    axios({
+      method: "get",
+      url: `${api}/vehicles`,
+    })
+      .then((result) => {
+        setLoading(false);
+        return setVehicles({
+          data: result.data.data.results,
+          total: result.data.data.total,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -115,11 +115,11 @@ const Vehicles = () => {
           <Table
             className="overflow-auto"
             columns={columns}
-            dataSource={data}
+            dataSource={vehicles.data}
             pagination={false}
           />
           <div className="w-full my-4 flex justify-center">
-            <Pagination defaultCurrent={1} total={100} />
+            <Pagination defaultCurrent={1} total={vehicles.total} />
           </div>
         </section>
       </main>

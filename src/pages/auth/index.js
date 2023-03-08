@@ -3,16 +3,21 @@ import { Button, Form, Input } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { userLogin } from "@/configs";
+import axios from "axios";
+const api = process.env.API_URL;
 
 const Auth = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
   });
 
-  //   console.log(formValue);
+  const [loading, setLoading] = useState(false);
 
   const handleNavigate = (href) => {
     return router.push(href);
@@ -24,11 +29,26 @@ const Auth = () => {
   };
 
   const handleSubmitForm = () => {
-    if (formValue.email !== "" && formValue.password !== "") {
-      handleNavigate("/dashboard");
-      return console.log("success");
+    setLoading(!loading);
+
+    if (formValue.email === "" && formValue.password === "") {
+      return console.log("Field cannot be empty");
     }
-    return console.log("field cannot be empty");
+
+    axios({
+      method: "post",
+      url: `${api}/auth`,
+      data: {
+        email: formValue.email,
+        password: formValue.password,
+      },
+    })
+      .then((result) => {
+        setLoading(false);
+        dispatch(userLogin(result.data));
+        return handleNavigate("/dashboard");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

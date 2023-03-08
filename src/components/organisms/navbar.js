@@ -1,8 +1,14 @@
 import { Avatar, Divider, List, Typography } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { userLogout } from "@/configs";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const [navbarModal, setNavbarModal] = useState({
     notif: false,
     avatar: false,
@@ -14,6 +20,8 @@ const Navbar = () => {
     "Australian walks 100km after outback crash.",
   ];
 
+  const handleNavigate = (href) => router.push(href);
+
   const handleNavbarModal = {
     notif: () => {
       setNavbarModal({ notif: !navbarModal.notif, avatar: false });
@@ -21,6 +29,11 @@ const Navbar = () => {
     avatar: () => {
       setNavbarModal({ notif: false, avatar: !navbarModal.avatar });
     },
+  };
+
+  const handleLogout = () => {
+    dispatch(userLogout());
+    return handleNavigate("/auth");
   };
 
   return (
@@ -72,7 +85,10 @@ const Navbar = () => {
               navbarModal.avatar ? "absolute" : "hidden"
             } top-14 md:right-6 right-0  z-40 px-4 py-1`}
           >
-            <button className="bg-cerise-red px-4 py-1 rounded-full border-2 border-mercury">
+            <button
+              className="bg-cerise-red px-4 py-1 rounded-full border-2 border-mercury"
+              onClick={handleLogout}
+            >
               <h1 className="text-md text-white">Logout</h1>
             </button>
           </div>
