@@ -1,11 +1,16 @@
 import { DashboardLayout } from "@/components";
 import { Table, Pagination, Input, DatePicker } from "antd";
-
 import { SearchOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import moment from "moment";
+import axios from "axios";
+const api = process.env.API_URL;
 
 const Transaction = () => {
-  //   const [typeDate, setTypeDate] = useState(false);
+  const userData = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
+  const [transaction, setTransaction] = useState({ data: [], total: 0 });
 
   const changeStartDate = (date, dateString) => {
     console.log(date, dateString);
@@ -58,37 +63,42 @@ const Transaction = () => {
     },
     {
       title: "Status",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "paymentStatus",
+      key: "paymentStatus",
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      customer: "Rangga",
-      vehicle: "Ferari",
-      quantity: 1,
-      totalPrice: 4000000,
-      days: 4,
-      startDate: "12-02-2023",
-      endDate: "16-02-2023",
-      paymentType: "transfer",
-      status: "Done",
-    },
-    {
-      key: "2",
-      customer: "Rangga",
-      vehicle: "Ferari",
-      quantity: 1,
-      totalPrice: 4000000,
-      days: 4,
-      startDate: "12-02-2023",
-      endDate: "16-02-2023",
-      paymentType: "transfer",
-      status: "Done",
-    },
-  ];
+  const fetchTransaction = () => {
+    setLoading(!loading);
+
+    axios({
+      method: "get",
+      url: `${api}/transaction`,
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    })
+      .then((result) => {
+        setLoading(false);
+        const keyData = result.data.data.results.map((item) => {
+          return {
+            ...item,
+            key: item.id,
+            startDate: moment(item.startDate).format("DD-MM-YYYY"),
+            endDate: moment(item.endDate).format("DD-MM-YYYY"),
+          };
+        });
+        return setTransaction({
+          data: keyData,
+          total: result.data.data.total,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchTransaction();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -113,12 +123,12 @@ const Transaction = () => {
           <Table
             className="overflow-auto"
             columns={columns}
-            dataSource={data}
+            dataSource={transaction.data}
             pagination={false}
             s
           />
           <div className="w-full my-4 flex justify-center">
-            <Pagination defaultCurrent={1} total={100} />
+            <Pagination defaultCurrent={1} total={transaction.total} />
           </div>
         </section>
       </main>

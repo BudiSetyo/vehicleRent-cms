@@ -8,6 +8,7 @@ const api = process.env.API_VRENT;
 const Vehicles = () => {
   const [loading, setLoading] = useState(false);
   const [vehicles, setVehicles] = useState({ data: [], total: 0 });
+  //   console.log(vehicles);
 
   const columns = [
     {
@@ -51,8 +52,15 @@ const Vehicles = () => {
     })
       .then((result) => {
         setLoading(false);
+        const keyData = result.data.data.results.map((items) => {
+          return {
+            key: items.id,
+            ...items,
+          };
+        });
+
         return setVehicles({
-          data: result.data.data.results,
+          data: keyData,
           total: result.data.data.total,
         });
       })

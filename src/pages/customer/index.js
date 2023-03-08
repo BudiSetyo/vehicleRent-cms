@@ -1,8 +1,17 @@
 import { DashboardLayout } from "@/components";
 import { Table, Pagination, Input, Button, Select } from "antd";
 import { SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import moment from "moment/moment";
+const api = process.env.API_URL;
 
 const Customer = () => {
+  const userData = useSelector((state) => state.user);
+  const [customer, setCustomer] = useState({ data: [], total: 0 });
+  const [loading, setLoading] = useState(false);
+
   const columns = [
     {
       title: "Name",
@@ -41,28 +50,37 @@ const Customer = () => {
     },
   ];
 
-  const data = [
-    {
-      name: "Bukayo Saka",
-      email: "sakka@gmail.com",
-      gender: "male",
-      address: "Jl. Kebayoran 12 No. 08",
-      phoneNumber: "0895678273627",
-      birth: "11-09-2001",
-      location: "Jakarta",
-      key: "1",
-    },
-    {
-      name: "Bukayo Saka",
-      email: "sakka@gmail.com",
-      gender: "male",
-      address: "Jl. Kebayoran 12 No. 08",
-      phoneNumber: "0895678273627",
-      birth: "11-09-2001",
-      location: "Jakarta",
-      key: "2",
-    },
-  ];
+  const fetchCustomer = () => {
+    setLoading(!loading);
+
+    axios({
+      method: "get",
+      url: `${api}/customer`,
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    })
+      .then((result) => {
+        setLoading(false);
+        const keyData = result.data.data.results.map((item) => {
+          return {
+            ...item,
+            key: item.id,
+            birth: moment(item.birth).format("DD-MM-YYYY"),
+          };
+        });
+
+        return setCustomer({
+          data: keyData,
+          total: result.data.data.total,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchCustomer();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -88,7 +106,7 @@ const Customer = () => {
           <Table
             className="overflow-auto"
             columns={columns}
-            dataSource={data}
+            dataSource={customer.data}
             pagination={false}
           />
           <div className="w-full my-4 flex justify-center">
