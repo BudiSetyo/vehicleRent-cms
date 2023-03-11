@@ -8,7 +8,7 @@ const api = process.env.API_VRENT;
 const Vehicles = () => {
   const [loading, setLoading] = useState(false);
   const [vehicles, setVehicles] = useState({ data: [], total: 0 });
-  //   console.log(vehicles);
+  const [filter, setFilter] = useState({ search: "", type: "", status: "" });
 
   const columns = [
     {
@@ -43,12 +43,55 @@ const Vehicles = () => {
     },
   ];
 
-  const fetchVehicles = () => {
+  const handlePagination = (page, pageSize) => {
+    if (filter.search !== "") {
+      return fetchFilterVehicles(page, pageSize);
+    }
+    return fetchVehicles(page, pageSize);
+  };
+
+  const handleFilter = {
+    search: (e) => {
+      setFilter({ ...filter, search: e.target.value });
+    },
+    type: (value) => {
+      setFilter({ ...filter, type: value });
+    },
+    status: (value) => {
+      setFilter({ ...filter, status: value });
+    },
+  };
+
+  const fetchFilterVehicles = (page, row) => {
     setLoading(!loading);
 
     axios({
       method: "get",
-      url: `${api}/vehicles`,
+      url:
+        filter.search === ""
+          ? `${api}/vehicles/?page=${page}&row=${row}`
+          : `${api}/vehicles/?search=${filter.search}&page=${page}&row=${row}`,
+    })
+      .then((result) => {
+        setLoading(false);
+        const keyData = result.data.data.results.map((item) => {
+          return {
+            ...item,
+            key: item.id,
+          };
+        });
+
+        setVehicles({ data: keyData, total: result.data.data.total });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const fetchVehicles = (page, row) => {
+    setLoading(!loading);
+
+    axios({
+      method: "get",
+      url: `${api}/vehicles/?page=${page}&row=${row}`,
     })
       .then((result) => {
         setLoading(false);
@@ -68,7 +111,7 @@ const Vehicles = () => {
   };
 
   useEffect(() => {
-    fetchVehicles();
+    fetchVehicles(1, 5);
   }, []);
 
   return (
@@ -83,6 +126,8 @@ const Vehicles = () => {
                 width: 100,
               }}
               prefix={<SearchOutlined />}
+              onChange={handleFilter.search}
+              onPressEnter={() => fetchFilterVehicles(1, 5)}
             />
             <Select
               className="mr-2"
@@ -95,7 +140,16 @@ const Vehicles = () => {
                   value: "car",
                   label: "Car",
                 },
+                {
+                  value: "moto bike",
+                  label: "Moto bike",
+                },
+                {
+                  value: "bike",
+                  label: "Bike",
+                },
               ]}
+              onChange={handleFilter.type}
             />
             <Select
               defaultValue="Status"
@@ -107,7 +161,12 @@ const Vehicles = () => {
                   value: "availale",
                   label: "Availale",
                 },
+                {
+                  value: "non availale",
+                  label: "Non availale",
+                },
               ]}
+              onChange={handleFilter.status}
             />
           </div>
 
@@ -127,7 +186,12 @@ const Vehicles = () => {
             pagination={false}
           />
           <div className="w-full my-4 flex justify-center">
-            <Pagination defaultCurrent={1} total={vehicles.total} />
+            <Pagination
+              defaultCurrent={1}
+              pageSize={5}
+              total={vehicles.total}
+              onChange={handlePagination}
+            />
           </div>
         </section>
       </main>

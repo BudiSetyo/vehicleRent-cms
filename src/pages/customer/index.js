@@ -110,7 +110,7 @@ const Customer = () => {
             pagination={false}
           />
           <div className="w-full my-4 flex justify-center">
-            <Pagination defaultCurrent={1} total={100} />
+            <Pagination defaultCurrent={1} total={customer.total} />
           </div>
         </section>
       </main>

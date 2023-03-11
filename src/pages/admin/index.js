@@ -40,29 +40,6 @@ const Admin = () => {
     },
   ];
 
-  const data = [
-    {
-      name: "Bukayo Saka",
-      email: "sakka@gmail.com",
-      gender: "male",
-      address: "Jl. Kebayoran 12 No. 08",
-      phoneNumber: "0895678273627",
-      birth: "11-09-2001",
-      location: "Jakarta",
-      key: "1",
-    },
-    {
-      name: "Bukayo Saka",
-      email: "sakka@gmail.com",
-      gender: "male",
-      address: "Jl. Kebayoran 12 No. 08",
-      phoneNumber: "0895678273627",
-      birth: "11-09-2001",
-      location: "Jakarta",
-      key: "2",
-    },
-  ];
-
   const fetchAdmins = () => {
     setLoading(!loading);
 
