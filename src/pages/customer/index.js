@@ -11,6 +11,7 @@ const Customer = () => {
   const userData = useSelector((state) => state.user);
   const [customer, setCustomer] = useState({ data: [], total: 0 });
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const columns = [
     {
@@ -50,12 +51,21 @@ const Customer = () => {
     },
   ];
 
-  const fetchCustomer = () => {
+  const handlePagination = (page, pageSize) => {
+    return fetchCustomer(page, pageSize);
+  };
+
+  const handleSearch = (e) => setSearch(e.target.value);
+
+  const fetchCustomer = (page, row) => {
     setLoading(!loading);
 
     axios({
       method: "get",
-      url: `${api}/customer`,
+      url:
+        search !== ""
+          ? `${api}/customer/?search=${search}&page${page}&row=${row}`
+          : `${api}/customer/?`,
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },
@@ -79,7 +89,7 @@ const Customer = () => {
   };
 
   useEffect(() => {
-    fetchCustomer();
+    fetchCustomer(1, 5);
   }, []);
 
   return (
@@ -91,16 +101,10 @@ const Customer = () => {
               className="mr-2"
               placeholder="Search"
               prefix={<SearchOutlined />}
+              onChange={handleSearch}
+              onPressEnter={() => fetchCustomer(1, 5)}
             />
           </div>
-
-          {/* <Button
-            type="primary"
-            className="flex items-center justify-center bg-algae-green w-fit px-2 rounded-full"
-          >
-            <PlusCircleOutlined className="mr-2 mb-1 text-lg text-white" />
-            <p className="text-white text-lg">Create vehicle</p>
-          </Button> */}
         </div>
         <section className="flex flex-col">
           <Table
@@ -110,7 +114,12 @@ const Customer = () => {
             pagination={false}
           />
           <div className="w-full my-4 flex justify-center">
-            <Pagination defaultCurrent={1} total={customer.total} />
+            <Pagination
+              defaultCurrent={1}
+              total={customer.total}
+              pageSize={5}
+              onChange={handlePagination}
+            />
           </div>
         </section>
       </main>

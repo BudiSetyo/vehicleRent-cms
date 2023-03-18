@@ -2,10 +2,12 @@ import { DashboardLayout } from "@/components";
 import { Table, Pagination, Input, Button, Select } from "antd";
 import { SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 const api = process.env.API_VRENT;
 
 const Vehicles = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [vehicles, setVehicles] = useState({ data: [], total: 0 });
   const [filter, setFilter] = useState({ search: "", type: "", status: "" });
@@ -43,12 +45,9 @@ const Vehicles = () => {
     },
   ];
 
-  const handlePagination = (page, pageSize) => {
-    if (filter.search !== "") {
-      return fetchFilterVehicles(page, pageSize);
-    }
-    return fetchVehicles(page, pageSize);
-  };
+  const handleNavigate = (href) => router.push(href);
+
+  const handlePagination = (page, pageSize) => fetchVehicles(page, pageSize);
 
   const handleFilter = {
     search: (e) => {
@@ -62,7 +61,7 @@ const Vehicles = () => {
     },
   };
 
-  const fetchFilterVehicles = (page, row) => {
+  const fetchVehicles = (page, row) => {
     setLoading(!loading);
 
     axios({
@@ -71,27 +70,6 @@ const Vehicles = () => {
         filter.search === ""
           ? `${api}/vehicles/?page=${page}&row=${row}`
           : `${api}/vehicles/?search=${filter.search}&page=${page}&row=${row}`,
-    })
-      .then((result) => {
-        setLoading(false);
-        const keyData = result.data.data.results.map((item) => {
-          return {
-            ...item,
-            key: item.id,
-          };
-        });
-
-        setVehicles({ data: keyData, total: result.data.data.total });
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const fetchVehicles = (page, row) => {
-    setLoading(!loading);
-
-    axios({
-      method: "get",
-      url: `${api}/vehicles/?page=${page}&row=${row}`,
     })
       .then((result) => {
         setLoading(false);
@@ -127,7 +105,7 @@ const Vehicles = () => {
               }}
               prefix={<SearchOutlined />}
               onChange={handleFilter.search}
-              onPressEnter={() => fetchFilterVehicles(1, 5)}
+              onPressEnter={() => fetchVehicles(1, 5)}
             />
             <Select
               className="mr-2"
@@ -172,7 +150,8 @@ const Vehicles = () => {
 
           <Button
             type="primary"
-            className="flex items-center justify-center bg-algae-green w-fit px-2 rounded-full"
+            className="flex items-center justify-center bg-picton-blue w-fit px-2 rounded-full"
+            onClick={() => handleNavigate("/vehicles/create")}
           >
             <PlusCircleOutlined className="mr-2 mb-1 text-lg text-white" />
             <p className="text-white text-lg">Create vehicle</p>
