@@ -37,7 +37,7 @@ const CreateVehicle = () => {
     prePayment: 0,
   });
 
-  console.log(formData);
+  //   console.log(formData);
 
   const handleFormData = {
     name: (e) => setFormData({ ...formData, name: e.target.value }),
@@ -51,6 +51,8 @@ const CreateVehicle = () => {
     type: (value) => setFormData({ ...formData, typeId: value }),
     prePayment: (value) => setFormData({ ...formData, prePayment: value }),
   };
+
+  const handleNavigate = (href) => router.push(href);
 
   const handleSubmitForm = () => {
     setLoading(!loading);
@@ -87,20 +89,24 @@ const CreateVehicle = () => {
         name: formData.name,
         typeId: formData.typeId,
         locationId: formData.locationId,
-        capacity: formData.capacity,
+        capacity: parseInt(formData.capacity),
         isPopular: false,
         description: formData.description,
-        price: formData.price,
-        prePayment: formData.prePayment,
+        price: parseInt(formData.price),
+        prePayment: parseInt(formData.prePayment),
         statusId: formData.statusId,
         picture: formData.image,
-        stock: formData.stock,
+        stock: parseInt(formData.stock),
       },
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },
     })
-      .then((result) => console.log(result))
+      .then((_) => {
+        setLoading(false);
+        message.success("Create vehicle success");
+        return handleNavigate("/vehicles");
+      })
       .catch((err) => console.log(err));
   };
 
@@ -319,7 +325,7 @@ const CreateVehicle = () => {
                 </Form.Item>
 
                 <Form.Item>
-                  <InputNumber
+                  <Iput
                     type="number"
                     className="w-full"
                     min={1}
