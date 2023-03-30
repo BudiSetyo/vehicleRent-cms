@@ -13,6 +13,8 @@ import {
   SearchOutlined,
   PlusCircleOutlined,
   CameraFilled,
+  EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -99,20 +101,36 @@ const Vehicles = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-    },
-    {
-      title: "Stock",
-      dataIndex: "stock",
-      key: "stock",
+      render: (_, record) => {
+        return (
+          <>
+            <div
+              className={`${
+                record.status === "available"
+                  ? "border-algae-green"
+                  : "border-cerise-red"
+              } border-2 py-1 px-4 rounded-full w-32 flex justify-center`}
+            >
+              <h1
+                className={`${
+                  record.status === "available"
+                    ? "text-algae-green"
+                    : "text-cerise-red"
+                } text-md font-medium`}
+              >
+                {record.status}
+              </h1>
+            </div>
+          </>
+        );
+      },
     },
     {
       render: (_, record) => {
         return (
           <div>
-            <Button
-              className="bg-algae-green px-6"
-              type="default"
-              block
+            <button
+              className=""
               onClick={() => {
                 setFormData({
                   name: record.name,
@@ -136,8 +154,8 @@ const Vehicles = () => {
                 });
               }}
             >
-              <p className="text-white">Edit</p>
-            </Button>
+              <EditOutlined className="text-2xl" />
+            </button>
           </div>
         );
       },
@@ -146,10 +164,8 @@ const Vehicles = () => {
       render: (_, record) => {
         return (
           <div>
-            <Button
-              className="px-4"
-              type="primary"
-              danger
+            <button
+              className=""
               onClick={() => {
                 return setShowModal({
                   ...showModal,
@@ -160,8 +176,8 @@ const Vehicles = () => {
                 });
               }}
             >
-              <p className="text-white">Delete</p>
-            </Button>
+              <DeleteOutlined className="text-2xl" />
+            </button>
           </div>
         );
       },
@@ -592,7 +608,7 @@ const Vehicles = () => {
               </h1>
             </div>
 
-            <di className="flex gap-4 justify-end">
+            <div className="flex gap-4 justify-end">
               <Button
                 type="primary"
                 danger
@@ -612,7 +628,7 @@ const Vehicles = () => {
               >
                 Confirm
               </Button>
-            </di>
+            </div>
           </DeleteModal>
         </section>
       </main>

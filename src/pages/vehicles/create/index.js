@@ -241,98 +241,104 @@ const CreateVehicle = () => {
 
             <div className="w-full p-4">
               <Form onFinish={handleSubmitForm} layout="vertical">
-                <Form.Item>
+                <Form.Item label="Name :">
                   <Input
                     placeholder="Name (max up to 50 words)"
                     onChange={handleFormData.name}
                   />
                 </Form.Item>
 
-                <Form.Item>
-                  <Select
-                    placeholder="Select vehicle type"
-                    options={types.map((item) => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                      };
-                    })}
-                    onChange={handleFormData.type}
-                  />
-                </Form.Item>
+                <div className="flex gap-6">
+                  <Form.Item label="Type :" className="w-full">
+                    <Select
+                      placeholder="Select vehicle type"
+                      options={types.map((item) => {
+                        return {
+                          value: item.id,
+                          label: item.name,
+                        };
+                      })}
+                      onChange={handleFormData.type}
+                    />
+                  </Form.Item>
 
-                <Form.Item>
-                  <Select
-                    placeholder="Select location"
-                    options={location.map((item) => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                      };
-                    })}
-                    onChange={handleFormData.location}
-                  />
-                </Form.Item>
+                  <Form.Item label="Location :" className="w-full">
+                    <Select
+                      placeholder="Select location"
+                      options={location.map((item) => {
+                        return {
+                          value: item.id,
+                          label: item.name,
+                        };
+                      })}
+                      onChange={handleFormData.location}
+                    />
+                  </Form.Item>
 
-                <Form.Item>
+                  <Form.Item label="Status :" className="w-full">
+                    <Select
+                      placeholder="Select status"
+                      options={status.map((item) => {
+                        return {
+                          value: item.id,
+                          label: item.name,
+                        };
+                      })}
+                      onChange={handleFormData.status}
+                    />
+                  </Form.Item>
+                </div>
+
+                <Form.Item label="Description :">
                   <TextArea
                     placeholder="Description (max up to 150 words)"
                     onChange={handleFormData.description}
                   />
                 </Form.Item>
 
-                <Form.Item>
-                  <InputNumber
-                    type="number"
-                    className="w-full"
-                    min={1}
-                    placeholder="Type the price"
-                    onChange={handleFormData.price}
-                  />
-                </Form.Item>
+                <div className="flex gap-6">
+                  <Form.Item label="Price :" className="w-full">
+                    <InputNumber
+                      type="number"
+                      className="w-full"
+                      min={1}
+                      placeholder="Type the price"
+                      onChange={handleFormData.price}
+                    />
+                  </Form.Item>
 
-                <Form.Item>
-                  <Select
-                    placeholder="Select status"
-                    options={status.map((item) => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                      };
-                    })}
-                    onChange={handleFormData.status}
-                  />
-                </Form.Item>
+                  <Form.Item label="Stock :" className="w-full">
+                    <InputNumber
+                      type="number"
+                      className="w-full"
+                      min={1}
+                      placeholder="Type the stock"
+                      onChange={handleFormData.stock}
+                    />
+                  </Form.Item>
+                </div>
 
-                <Form.Item>
-                  <InputNumber
-                    type="number"
-                    className="w-full"
-                    min={1}
-                    placeholder="Type the stock"
-                    onChange={handleFormData.stock}
-                  />
-                </Form.Item>
+                <div className="flex gap-6">
+                  <Form.Item label="Capacity" className="w-full">
+                    <InputNumber
+                      type="number"
+                      className="w-full"
+                      min={1}
+                      placeholder="Type the capacity"
+                      onChange={handleFormData.capacity}
+                    />
+                  </Form.Item>
 
-                <Form.Item>
-                  <InputNumber
-                    type="number"
-                    className="w-full"
-                    min={1}
-                    placeholder="Type the capacity"
-                    onChange={handleFormData.capacity}
-                  />
-                </Form.Item>
-
-                <Form.Item>
-                  <Iput
-                    type="number"
-                    className="w-full"
-                    min={1}
-                    placeholder="Type the pre payment"
-                    onChange={handleFormData.prePayment}
-                  />
-                </Form.Item>
+                  <Form.Item label="Pre payment :" className="w-full">
+                    <Input
+                      type="number"
+                      className="w-full"
+                      min={0}
+                      placeholder="Type the pre payment"
+                      onChange={handleFormData.prePayment}
+                    />
+                  </Form.Item>
+                </div>
 
                 <div className="flex justify-end">
                   <Button

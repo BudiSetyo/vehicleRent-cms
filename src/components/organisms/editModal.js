@@ -1,11 +1,11 @@
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 
-const EditModal = ({ modalOpen, onOk, onCancel, title, children }) => {
+const EditModal = ({ modalOpen, onOk, onCancel, title, children, width }) => {
   return (
     <div>
       <Modal
-        width={850}
-        title={title}
+        width={width || 850}
+        title={<h1 className="text-lg">{title}</h1>}
         open={modalOpen}
         onOk={onOk}
         onCancel={onCancel}

@@ -35,7 +35,7 @@ const Sidebar = () => {
                   page === item ? "border-b-2 border-black" : ""
                 }`}
               >
-                <div className="text-md mb-2">
+                <div className="text-md">
                   {item === "dashboard" ? (
                     <HomeOutlined />
                   ) : item === "vehicles" ? (
