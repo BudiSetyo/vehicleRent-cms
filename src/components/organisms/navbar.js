@@ -1,13 +1,16 @@
-import { Avatar, Divider, List, Typography } from "antd";
+import { Avatar, Divider, List } from "antd";
 import { BellOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "@/configs";
 import { useRouter } from "next/router";
+import axios from "axios";
+const apiVrent = process.env.API_VRENT;
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const userData = useSelector((state) => state.user);
 
   const [navbarModal, setNavbarModal] = useState({
     notif: false,
@@ -35,6 +38,28 @@ const Navbar = () => {
     dispatch(userLogout());
     return handleNavigate("/auth");
   };
+
+  const checkToken = () => {
+    axios({
+      method: "get",
+      url: `${apiVrent}/auth`,
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    })
+      .then((result) => {
+        if (result.data.error) {
+          dispatch(userLogout());
+          return handleNavigate("/auth");
+        }
+        return;
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   return (
     <div className="md:px-8 px-2 py-4 flex justify-between bg-oxford-blue fixed w-full z-50">

@@ -1,6 +1,6 @@
-import { DashboardLayout } from "@/components";
+import { DashboardLayout, Spiner } from "@/components";
 import { Table, Pagination, Input, Button, Select } from "antd";
-import { SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -95,6 +95,8 @@ const Customer = () => {
   return (
     <DashboardLayout>
       <main className="">
+        {loading ? <Spiner /> : <></>}
+
         <div className="mb-4 flex justify-between">
           <div className="flex md:mb-0 mb-2">
             <Input

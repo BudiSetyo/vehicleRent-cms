@@ -1,4 +1,4 @@
-import { DashboardLayout, DeleteModal, EditModal } from "@/components";
+import { DashboardLayout, DeleteModal, EditModal, Spiner } from "@/components";
 import { Table, Pagination, Input, DatePicker, Button, message } from "antd";
 import { SearchOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
@@ -351,6 +351,8 @@ const Transaction = () => {
   return (
     <DashboardLayout>
       <main className="">
+        {loading ? <Spiner /> : <></>}
+
         <div className="mb-4 flex justify-between">
           <div className="w-full flex md:flex-row flex-col md:gap-x-5 gap-y-2 md:mb-0 mb-2">
             <Input

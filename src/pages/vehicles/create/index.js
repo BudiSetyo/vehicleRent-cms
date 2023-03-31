@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components";
+import { DashboardLayout, Spiner } from "@/components";
 import { CaretLeftOutlined, CameraFilled } from "@ant-design/icons";
 import {
   Button,
@@ -79,7 +79,8 @@ const CreateVehicle = () => {
       typeId === "" ||
       capacity === 0
     ) {
-      return console.log("fields cant be empty");
+      setLoading(false);
+      return message.error("Fields can't be empty");
     }
 
     axios({
@@ -196,6 +197,8 @@ const CreateVehicle = () => {
   return (
     <DashboardLayout>
       <main>
+        {loading ? <Spiner /> : <></>}
+
         <div className="flex gap-8 items-center">
           <button className="flex items-center" onClick={() => router.back()}>
             <CaretLeftOutlined className="text-2xl" />

@@ -23,6 +23,7 @@ module.exports = {
         "briliant-rose": "#ED64A6",
         "geraldine-red": "#FC8181",
         "casablanca-orange": "#F6AD55",
+        transparant: "rgba(0, 0, 0, 0.5)",
       },
     },
   },

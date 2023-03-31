@@ -1,4 +1,4 @@
-import { DashboardLayout, EditModal, DeleteModal } from "@/components";
+import { DashboardLayout, EditModal, DeleteModal, Spiner } from "@/components";
 import {
   Table,
   Pagination,
@@ -353,6 +353,8 @@ const Vehicles = () => {
   return (
     <DashboardLayout>
       <main className="">
+        {loading ? <Spiner /> : <></>}
+
         <div className="mb-4 flex md:flex-row flex-col md:justify-between">
           <div className="flex md:mb-0 mb-2">
             <Input

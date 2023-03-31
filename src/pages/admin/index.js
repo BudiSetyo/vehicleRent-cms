@@ -1,4 +1,4 @@
-import { DashboardLayout, EditModal, DeleteModal } from "@/components";
+import { DashboardLayout, EditModal, DeleteModal, Spiner } from "@/components";
 import { Table, Pagination, Input, Button, Form, Select, message } from "antd";
 import {
   SearchOutlined,
@@ -17,6 +17,7 @@ const apiVrent = process.env.API_VRENT;
 const Admin = () => {
   const router = useRouter();
   const userData = useSelector((state) => state.user);
+  //   console.log(userData);
 
   const [loading, setLoading] = useState(false);
   const [admins, setAdmins] = useState({ data: [], total: 0 });
@@ -29,6 +30,10 @@ const Admin = () => {
     gender: "",
     address: "",
     phoneNumber: "",
+  });
+  const [editPassword, setEditPassword] = useState({
+    password: "",
+    checkPassword: "",
   });
 
   const [showModal, setShowModal] = useState({
@@ -150,6 +155,15 @@ const Admin = () => {
     });
   };
 
+  const handleChangeFormPassword = (e) => {
+    const { name, value } = e.target;
+
+    return setEditPassword({
+      ...editPassword,
+      [name]: value,
+    });
+  };
+
   const handleChangeSelect = {
     location: (value) => setFormData({ ...formData, locationId: value }),
     gender: (value) => setFormData({ ...formData, gender: value }),
@@ -168,7 +182,7 @@ const Admin = () => {
 
     axios({
       method: "patch",
-      url: `${api}/admin?id=${showModal.edit.data.id}`,
+      url: `${api}/admin/?id=${showModal.edit.data.id}`,
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },
@@ -185,6 +199,63 @@ const Admin = () => {
           },
         });
         return message.success("Edit admin success");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleSubmitFormPassword = () => {
+    setLoading(!loading);
+
+    if (editPassword.password === "" || editPassword.checkPassword === "") {
+      return message.error("Fields can't be empty!");
+    }
+
+    if (editPassword.password !== editPassword.checkPassword) {
+      return message.error("Passwords must be the same!");
+    }
+
+    axios({
+      method: "patch",
+      url: `${api}/admin/?id=${showModal.password.data.id}`,
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+      data: {
+        password: editPassword.password,
+      },
+    })
+      .then((_) => {
+        setLoading(false);
+        fetchAdmins(1, 5);
+        setShowModal({
+          ...showModal,
+          password: {
+            status: false,
+            data: {},
+          },
+        });
+        setEditPassword({
+          password: "",
+          checkPassword: "",
+        });
+        return message.success("Change password admin success");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDeleteAdmin = () => {
+    setLoading(!loading);
+
+    axios({
+      method: "delete",
+      url: `${api}/admin/${showModal.delete.data.id}`,
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    })
+      .then((_) => {
+        setLoading(false);
+        return message.success("Delete admin success");
       })
       .catch((err) => console.log(err));
   };
@@ -241,6 +312,8 @@ const Admin = () => {
   return (
     <DashboardLayout>
       <main className="">
+        {loading ? <Spiner /> : <></>}
+
         <div className="mb-4 flex justify-between">
           <div className="flex md:mb-0 mb-2">
             <Input
@@ -346,7 +419,6 @@ const Admin = () => {
                   value={formData.address}
                   onChange={handleChangeForm}
                   name="address"
-                  autoComplete={false}
                 />
               </Form.Item>
 
@@ -414,7 +486,11 @@ const Admin = () => {
                   Cancel
                 </Button>
 
-                <Button className="bg-picton-blue" type="primary">
+                <Button
+                  className="bg-picton-blue"
+                  type="primary"
+                  onClick={handleDeleteAdmin}
+                >
                   Confirm
                 </Button>
               </div>
@@ -424,22 +500,40 @@ const Admin = () => {
           <DeleteModal
             title={`Change password admin ${showModal.password.data.name}`}
             modalOpen={showModal.password.status}
-            onCancel={() =>
+            onCancel={() => {
               setShowModal({
                 ...showModal,
                 password: { status: false, data: {} },
-              })
-            }
+              });
+
+              setEditPassword({
+                password: "",
+                checkPassword: "",
+              });
+            }}
           >
-            <Form className="mt-6" layout="vertical">
+            <Form
+              className="mt-6"
+              layout="vertical"
+              onFinish={handleSubmitFormPassword}
+            >
               <Form.Item>
-                <Input type="password" placeholder="Type your new password" />
+                <Input
+                  type="password"
+                  value={editPassword.password}
+                  placeholder="Type your new password"
+                  name="password"
+                  onChange={handleChangeFormPassword}
+                />
               </Form.Item>
 
               <Form.Item>
                 <Input
                   type="password"
+                  value={editPassword.checkPassword}
                   placeholder="Re type your new password"
+                  name="checkPassword"
+                  onChange={handleChangeFormPassword}
                 />
               </Form.Item>
 
@@ -447,17 +541,26 @@ const Admin = () => {
                 <Button
                   type="primary"
                   danger
-                  onClick={() =>
+                  onClick={() => {
                     setShowModal({
                       ...showModal,
                       password: { status: false, data: {} },
-                    })
-                  }
+                    });
+
+                    setEditPassword({
+                      password: "",
+                      checkPassword: "",
+                    });
+                  }}
                 >
                   Cancel
                 </Button>
 
-                <Button type="primary" className="bg-picton-blue">
+                <Button
+                  type="primary"
+                  className="bg-picton-blue"
+                  htmlType="submit"
+                >
                   Confirm
                 </Button>
               </div>

@@ -1,6 +1,9 @@
 // Atoms
 import Button from "./atoms/button";
 
+// Molecules
+import Spiner from "./molecules/spiner";
+
 // Organism
 import Form from "./organisms/form";
 import Navbar from "./organisms/navbar";
@@ -21,4 +24,5 @@ export {
   Sidebar,
   AuthLayout,
   DashboardLayout,
+  Spiner,
 };

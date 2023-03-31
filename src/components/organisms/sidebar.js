@@ -31,11 +31,11 @@ const Sidebar = () => {
           return (
             <button key={index} onClick={() => handleNavigate(`/${item}`)}>
               <div
-                className={`my-4 flex items-center w-fit ${
+                className={`my-2 py-1 flex items-center w-fit ${
                   page === item ? "border-b-2 border-black" : ""
                 }`}
               >
-                <div className="text-md">
+                <div className="text-md mb-2">
                   {item === "dashboard" ? (
                     <HomeOutlined />
                   ) : item === "vehicles" ? (

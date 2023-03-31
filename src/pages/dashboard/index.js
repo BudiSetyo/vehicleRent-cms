@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components";
+import { DashboardLayout, Spiner } from "@/components";
 import { PieChart } from "react-minimal-pie-chart";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -41,6 +41,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <main className="">
+        {loading ? <Spiner /> : <></>}
         <section className="my-16 px-10">
           <div className="flex md:flex-row flex-col gap-10 max-w-5xl mx-auto items-center justify-center">
             <PieChart

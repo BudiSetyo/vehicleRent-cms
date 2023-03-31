@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components";
+import { DashboardLayout, Spiner } from "@/components";
 import { CaretLeftOutlined, CameraFilled } from "@ant-design/icons";
 import { Button, message, Upload, Form, Input, Select } from "antd";
 const { TextArea } = Input;
@@ -86,6 +86,8 @@ const CreateAdmin = () => {
   return (
     <DashboardLayout>
       <main>
+        {loading ? <Spiner /> : <></>}
+
         <div className="flex gap-8">
           <button className="flex items-center" onClick={() => router.back()}>
             <CaretLeftOutlined className="text-2xl" />

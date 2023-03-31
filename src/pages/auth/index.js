@@ -1,4 +1,4 @@
-import { AuthLayout } from "@/components";
+import { AuthLayout, Spiner } from "@/components";
 import { Button, Form, Input } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useState } from "react";
@@ -54,6 +54,8 @@ const Auth = () => {
   return (
     <AuthLayout>
       <main>
+        {loading ? <Spiner /> : <></>}
+
         <section className="flex flex-col items-center p-4">
           <h1 className="mt-36 text-4xl text-oxford-blue font-bold">
             VehicleRent<span className="text-san-juan">CMS</span>
