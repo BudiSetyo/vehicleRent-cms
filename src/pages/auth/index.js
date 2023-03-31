@@ -61,7 +61,7 @@ const Auth = () => {
             VehicleRent<span className="text-san-juan">CMS</span>
           </h1>
 
-          <div className="bg-white md:w-3/5 w-full mt-10 mb-36 rounded p-8 ">
+          <div className="bg-white max-w-md md:w-3/5 w-full mt-10 mb-36 rounded p-8 ">
             <Form layout="vertical" onFinish={handleSubmitForm}>
               <Form.Item
                 label={
