@@ -36,16 +36,13 @@ const Vehicles = () => {
       status: false,
       data: {},
     },
+    popular: false,
   });
-
-  //   console.log(showModal);
 
   const [vehicles, setVehicles] = useState({ data: [], total: 0 });
   const [vehicleType, setVehicleType] = useState([]);
   const [locations, setLocations] = useState([]);
   const [status, setStatus] = useState([]);
-
-  //   console.log(vehicleType, locations);
 
   const [filter, setFilter] = useState({ search: "", type: "", status: "" });
   const [formData, setFormData] = useState({
@@ -60,8 +57,6 @@ const Vehicles = () => {
     prePayment: 0,
     picture: "",
   });
-
-  //   console.log(formData);
 
   const handleFormData = {
     name: (e) => setFormData({ ...formData, name: e.target.value }),
@@ -122,6 +117,60 @@ const Vehicles = () => {
               </h1>
             </div>
           </>
+        );
+      },
+    },
+    {
+      title: "Popular",
+      dataIndex: "isPopular",
+      key: "isPopular",
+      render: (_, record) => {
+        return (
+          <div className="relative flex">
+            <button
+              className={`${
+                record.isPopular ? "bg-picton-blue" : "bg-cerise-red"
+              } py-2 px-3 rounded-full text-white font-bold w-28`}
+              onClick={() =>
+                setShowModal({ ...showModal, popular: !showModal.popular })
+              }
+            >
+              {record.isPopular ? "Popular" : "Non Popular"}
+            </button>
+
+            <button
+              className={`
+                ${showModal.popular ? "" : "hidden"}
+              ${
+                record.isPopular ? "bg-cerise-red" : "bg-picton-blue"
+              } py-2 px-3 rounded-full text-white font-bold absolute top-12 w-28`}
+              onClick={() => {
+                setLoading(true);
+                axios({
+                  method: "patch",
+                  url: `${api}/vehicles/?vehicleId=${record.id}`,
+                  headers: {
+                    Authorization: `Bearer ${userData.token}`,
+                  },
+                  data: {
+                    isPopular: !record.isPopular,
+                  },
+                })
+                  .then((result) => {
+                    console.log(result);
+                    setShowModal({ ...showModal, popular: false });
+                    fetchVehicles(1, 5);
+                    setLoading(false);
+                  })
+                  .catch((err) => {
+                    setLoading(false);
+                    console.log(err);
+                  });
+              }}
+            >
+              {record.isPopular ? "Non Popular" : "Popular"}
+            </button>
+          </div>
         );
       },
     },
@@ -250,7 +299,6 @@ const Vehicles = () => {
         return message.success(`Edit vehicle success`);
       })
       .catch((err) => {
-        console.log(err);
         return message.error(`Edit vehicle error`);
       });
   };

@@ -1,5 +1,6 @@
 import { DashboardLayout, Spiner } from "@/components";
 import { PieChart } from "react-minimal-pie-chart";
+import { Skeleton } from "antd";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -40,86 +41,87 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <main className="">
-        {loading ? <Spiner /> : <></>}
-        <section className="my-16 px-10">
-          <div className="flex md:flex-row flex-col gap-10 max-w-5xl mx-auto items-center justify-center">
-            <PieChart
-              data={[
-                {
-                  title: "Customer",
-                  value: parseInt(chart.customer),
-                  color: "#2B3A55",
-                },
-                {
-                  title: "Vehicles",
-                  value: parseInt(chart.vehicle),
-                  color: "#CE7777",
-                },
-                {
-                  title: "Transactions",
-                  value: parseInt(chart.transaction),
-                  color: "#E8C4C4",
-                },
-                {
-                  title: "Admin",
-                  value: parseInt(chart.admin),
-                  color: "#F2E5E5",
-                },
-              ]}
-              animate={true}
-              className="w-full max-w-md"
-              lineWidth={50}
-            />
+      <Skeleton loading={loading}>
+        <main>
+          <section className="my-16 px-10">
+            <div className="flex md:flex-row flex-col gap-10 max-w-5xl mx-auto items-center justify-center">
+              <PieChart
+                data={[
+                  {
+                    title: "Customer",
+                    value: parseInt(chart.customer),
+                    color: "#2B3A55",
+                  },
+                  {
+                    title: "Vehicles",
+                    value: parseInt(chart.vehicle),
+                    color: "#CE7777",
+                  },
+                  {
+                    title: "Transactions",
+                    value: parseInt(chart.transaction),
+                    color: "#E8C4C4",
+                  },
+                  {
+                    title: "Admin",
+                    value: parseInt(chart.admin),
+                    color: "#F2E5E5",
+                  },
+                ]}
+                animate={true}
+                className="w-full max-w-md"
+                lineWidth={50}
+              />
 
-            <div className="flex flex-col gap-4 w-full items-center">
-              <div className="flex gap-4 items-center">
-                <div
-                  className="p-4 rounded-full"
-                  style={{ backgroundColor: "#2B3A55" }}
-                />
-                <div className="flex gap-10 items-center justify-between w-48">
-                  <h1 className="text-lg">Customer</h1>
-                  <p>{chart.customer}</p>
+              <div className="flex flex-col gap-4 w-full items-center">
+                <div className="flex gap-4 items-center">
+                  <div
+                    className="p-4 rounded-full"
+                    style={{ backgroundColor: "#2B3A55" }}
+                  />
+                  <div className="flex gap-10 items-center justify-between w-48">
+                    <h1 className="text-lg">Customer</h1>
+                    <p>{chart.customer}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-4 items-center">
-                <div
-                  className="p-4 rounded-full"
-                  style={{ backgroundColor: "#CE7777" }}
-                />
-                <div className="flex gap-10 items-center justify-between w-48">
-                  <h1 className="text-lg">Vehicles</h1>
-                  <p>{chart.vehicle}</p>
+                <div className="flex gap-4 items-center">
+                  <div
+                    className="p-4 rounded-full"
+                    style={{ backgroundColor: "#CE7777" }}
+                  />
+                  <div className="flex gap-10 items-center justify-between w-48">
+                    <h1 className="text-lg">Vehicles</h1>
+                    <p>{chart.vehicle}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-4 items-center">
-                <div
-                  className="p-4 rounded-full"
-                  style={{ backgroundColor: "#E8C4C4" }}
-                />
-                <div className="flex gap-10 items-center justify-between w-48">
-                  <h1 className="text-lg">Transactions</h1>
-                  <p>{chart.transaction}</p>
+                <div className="flex gap-4 items-center">
+                  <div
+                    className="p-4 rounded-full"
+                    style={{ backgroundColor: "#E8C4C4" }}
+                  />
+                  <div className="flex gap-10 items-center justify-between w-48">
+                    <h1 className="text-lg">Transactions</h1>
+                    <p>{chart.transaction}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-4 items-center">
-                <div
-                  className="p-4 rounded-full"
-                  style={{ backgroundColor: "#F2E5E5" }}
-                />
-                <div className="flex gap-10 items-center justify-between w-48">
-                  <h1 className="text-lg">Admin</h1>
-                  <p>{chart.admin}</p>
+                <div className="flex gap-4 items-center">
+                  <div
+                    className="p-4 rounded-full"
+                    style={{ backgroundColor: "#F2E5E5" }}
+                  />
+                  <div className="flex gap-10 items-center justify-between w-48">
+                    <h1 className="text-lg">Admin</h1>
+                    <p>{chart.admin}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+        </main>
+      </Skeleton>
     </DashboardLayout>
   );
 };

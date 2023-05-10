@@ -37,8 +37,6 @@ const CreateVehicle = () => {
     prePayment: 0,
   });
 
-  //   console.log(formData);
-
   const handleFormData = {
     name: (e) => setFormData({ ...formData, name: e.target.value }),
     location: (value) => setFormData({ ...formData, locationId: value }),
@@ -108,7 +106,10 @@ const CreateVehicle = () => {
         message.success("Create vehicle success");
         return handleNavigate("/vehicles");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        message.error("Create vehicle failed");
+      });
   };
 
   const props = {
@@ -333,7 +334,7 @@ const CreateVehicle = () => {
                   </Form.Item>
 
                   <Form.Item label="Pre payment :" className="w-full">
-                    <Input
+                    <InputNumber
                       type="number"
                       className="w-full"
                       min={0}
@@ -362,3 +363,5 @@ const CreateVehicle = () => {
 };
 
 export default CreateVehicle;
+
+`"{"name":"Vespa matic","typeId":"2a2823f0-ddc6-4c25-8f8c-791f7bdeea76","locationId":"21c97f66-2c86-40fb-a2bc-afa0d10a13be","capacity":2,"isPopular":false,"description":"test desc","price":600000,"prePayment":null,"statusId":"5a917469-a471-4c12-b67b-814c3bc5ab34","picture":"https://res.cloudinary.com/dprdhtoa3/image/upload/v1683666358/hoosl6t9utphcwpr3iit.jpg","stock":5}"`;

@@ -17,6 +17,10 @@ const Navbar = () => {
     avatar: false,
   });
 
+  const [chatData, setChatData] = useState([]);
+
+  //   console.log(chatData);
+
   const data = [
     "Racing car sprays burning fuel into crowd.",
     "Japanese princess to wed commoner.",
@@ -47,18 +51,34 @@ const Navbar = () => {
         Authorization: `Bearer ${userData.token}`,
       },
     })
-      .then((result) => {
-        if (result.data.error) {
-          dispatch(userLogout());
-          return handleNavigate("/auth");
-        }
+      .then((_) => {
         return;
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data?.error) {
+          handleLogout();
+        }
+      });
+  };
+
+  const fetchChatData = () => {
+    axios({
+      method: "get",
+      url: `${apiVrent}/chats/admin/?userId=${userData.data.id}`,
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    })
+      .then((result) => {
+        setChatData(result.data.data);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     checkToken();
+    fetchChatData();
   }, []);
 
   return (
@@ -89,17 +109,22 @@ const Navbar = () => {
           >
             <Divider orientation="left">
               <List
-                dataSource={data}
+                dataSource={chatData}
                 renderItem={(item) => (
                   <List.Item>
-                    <button>{item}</button>
+                    <button>
+                      <p>{item.currentChat}</p>
+                    </button>
                   </List.Item>
                 )}
               />
             </Divider>
 
             <div className="flex justify-center mb-2">
-              <button className="px-4 py-2 rounded-full bg-cerise-red">
+              <button
+                className="px-4 py-2 rounded-full bg-cerise-red"
+                onClick={() => handleNavigate("/chat")}
+              >
                 <p className="text-white">View all</p>
               </button>
             </div>
